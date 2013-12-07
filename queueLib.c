@@ -49,3 +49,8 @@ void* deQueue(Queue *queue){
 	  queue->queueInfo.elementSize);
 	return dequeuedElement;
 }
+
+void dispose(Queue* queue){
+	free(queue->base);
+	free(queue);
+}

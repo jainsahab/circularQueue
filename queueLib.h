@@ -13,3 +13,4 @@ typedef struct{
 Queue* create(int elementSize,int length);
 bool enQueue(Queue* queue,void* element);
 void* deQueue(Queue* queue);
+void dispose(Queue* queue);

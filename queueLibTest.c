@@ -9,8 +9,7 @@
 Queue* queue;
 
 void tearDown(){
-	free(queue->base);
-	free(queue);
+	dispose(queue);
 }
 int areEqual(Queue* src, Queue* expected){
 	int res = (src->queueInfo.elementSize == expected->queueInfo.elementSize) 
@@ -114,4 +113,211 @@ void test_to_check_the_behaviour_on_full_capacity_after_dequeing(){
 void test_to_deque_from_empty_queue(){
 	queue = create(sizeof(int), 4);
 	ASSERT(NULL==deQueue(queue));
+}
+
+
+void test_enqueue_char_element_at_rear_of_queue(){
+    char c='A';
+    queue = create(sizeof(char),5);
+    ASSERT(enQueue(queue,&c));
+    ASSERT(*(char*)(queue->base)=='A');
+    ASSERT(queue->queueInfo.rear==0);
+}
+
+void test_enqueue_char_element_at_rear_of_queue_rear_is_at_middle(){
+    char c='K';
+    queue = create(sizeof(char),6);
+    queue->queueInfo.rear = 3;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(*(char*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize) == 'K');
+    ASSERT(queue->queueInfo.rear == 4);
+}
+
+void test_enqueue_char_element_at_rear_of_queue_rear_is_at_middle1(){
+    char c='J';
+    queue = create(sizeof(char),6);
+    queue->queueInfo.rear = 3;
+    queue->queueInfo.front = 5;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(*(char*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize) == 'J');
+    ASSERT(queue->queueInfo.rear == 4);
+}
+
+void test_enqueue_char_element_return_false_when_queue_is_full(){
+    char c='Q';
+    queue = create(sizeof(char),6);
+    queue->queueInfo.rear = 5;
+    queue->queueInfo.front = -1;
+    ASSERT(!enQueue(queue,&c));
+    ASSERT(queue->queueInfo.rear == 5);
+}
+
+void test_enqueue_int_element_at_rear_of_queue(){
+    int c=5;
+    queue = create(sizeof(int),5);
+    ASSERT(enQueue(queue,&c));
+    ASSERT(*(int*)(queue->base)==5);
+    ASSERT(queue->queueInfo.rear==0);
+}
+
+void test_enqueue_float_element_at_rear_of_queue(){
+    float c=1.5;
+    queue = create(sizeof(float),5);
+    queue->queueInfo.rear = 1;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(queue->queueInfo.rear == 2);
+    ASSERT(*(float*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize)==1.5);
+}
+
+
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+
+void test_enqueue_string_element_at_rear_of_queue(){
+    String c = "hi";
+    queue = create(sizeof(String),5);
+    ASSERT(enQueue(queue,&c));
+    ASSERT(!strcmp("hi", *(String*)queue->base));
+    ASSERT(queue->queueInfo.rear == 0);
+}
+void test_enqueue_int_element_at_rear_of_queue_rear_is_at_middle(){
+    int c=5;
+    queue = create(sizeof(int),6);
+    queue->queueInfo.rear = 3;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(*(int*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize) == 5);
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_enqueue_int_element_at_rear_of_queue_rear_is_at_middle1(){
+    int c=10;
+    queue = create(sizeof(int),6);
+    queue->queueInfo.rear = 3;
+    queue->queueInfo.front = 5;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(*(int*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize) == 10);
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_enqueue_int_element_return_false_when_queue_is_full(){
+    int c=10;
+    queue = create(sizeof(int),6);
+    queue->queueInfo.rear = 5;
+    queue->queueInfo.front = -1;
+    ASSERT(!enQueue(queue,&c));
+    ASSERT(queue->queueInfo.rear == 5);
+}
+void test_enqueue_int_element_return_false_when_queue_is_full1(){
+    int c=10;
+    queue = create(sizeof(int),6);
+    queue->queueInfo.rear = 4;
+    queue->queueInfo.front = 5;
+    ASSERT(!enQueue(queue,&c));
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_enqueue_float_element_at_rear_of_queue_rear_is_at_middle(){
+    float c=5.90f;
+    queue = create(sizeof(float),6);
+    queue->queueInfo.rear = 3;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(*(float*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize) == 5.90f);
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_enqueue_float_element_at_rear_of_queue_rear_is_at_middle1(){
+    float c=20.20f;
+    queue = create(sizeof(float),6);
+    queue->queueInfo.rear = 3;
+    queue->queueInfo.front = 5;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(*(float*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize) == 20.20f);
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_enqueue_float_element_return_false_when_queue_is_full(){
+    float c=10.50;
+    queue = create(sizeof(float),6);
+    queue->queueInfo.rear = 5;
+    queue->queueInfo.front = -1;
+    ASSERT(!enQueue(queue,&c));
+    ASSERT(queue->queueInfo.rear == 5);
+}
+void test_enqueue_float_element_return_false_when_queue_is_full1(){
+    float c=10.10;
+    queue = create(sizeof(float),6);
+    queue->queueInfo.rear = 4;
+    queue->queueInfo.front = 5;
+    ASSERT(!enQueue(queue,&c));
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_enqueue_string_element_at_rear_of_queue_rear_is_at_middle(){
+    String c="vidya";
+    queue = create(sizeof(String),6);
+    queue->queueInfo.rear = 3;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(!strcmp(*(String*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize) , "vidya"));
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_enqueue_string_element_at_rear_of_queue_rear_is_at_middle1(){
+    String c="poonam";
+    queue = create(sizeof(String),6);
+    queue->queueInfo.rear = 3;
+    queue->queueInfo.front = 5;
+    ASSERT(enQueue(queue,&c));
+    ASSERT(strcpy(*(String*)(queue->base+queue->queueInfo.rear*queue->queueInfo.elementSize) , "poonam"));
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_enqueue_string_element_return_false_when_queue_is_full(){
+    String c="hi";
+    queue = create(sizeof(float),6);
+    queue->queueInfo.rear = 5;
+    queue->queueInfo.front = -1;
+    ASSERT(!enQueue(queue,&c));
+    ASSERT(queue->queueInfo.rear == 5);
+}
+void test_enqueue_string_element_return_false_when_queue_is_full1(){
+    String c="hi";
+    queue = create(sizeof(String),6);
+    queue->queueInfo.rear = 4;
+    queue->queueInfo.front = 5;
+    ASSERT(!enQueue(queue,&c));
+    ASSERT(queue->queueInfo.rear == 4);
+}
+void test_dequeue_int_element_at_front_of_queue(){
+    void* element;
+    int data[]={2,3,4};
+    queue = create(sizeof(int),5);
+    enQueue(queue,&data[0]);
+    enQueue(queue,&data[1]);
+    enQueue(queue,&data[2]);
+    ASSERT(queue->queueInfo.rear == 2);
+    ASSERT(queue->queueInfo.front == -1);
+    element = deQueue(queue);
+    ASSERT(*(int*)element == 2.0f);
+    ASSERT(queue->queueInfo.rear == 2);
+    ASSERT(queue->queueInfo.front == 0);
+}
+void test_dequeue_float_element_at_front_of_queue(){
+    void* element;
+    float data[]={2.0f,3.0f,4.0f};
+    queue = create(sizeof(float),5);
+    enQueue(queue,&data[0]);
+    enQueue(queue,&data[1]);
+    enQueue(queue,&data[2]);
+    ASSERT(queue->queueInfo.rear == 2);
+    ASSERT(queue->queueInfo.front == -1);
+    element = deQueue(queue);
+    ASSERT(*(float*)element == 2.0f);
+    ASSERT(queue->queueInfo.rear == 2);
+    ASSERT(queue->queueInfo.front == 0);
+}
+void test_dequeue_string_element_at_front_of_queue(){
+    void* element;
+    String data[]={"sayali","shital","Samiksha"};
+    queue = create(sizeof(String),5);
+    enQueue(queue,&data[0]);
+    enQueue(queue,&data[1]);
+    enQueue(queue,&data[2]);
+    ASSERT(queue->queueInfo.rear == 2);
+    ASSERT(queue->queueInfo.front == -1);
+    element = deQueue(queue);
+    ASSERT(!strcmp(*(String*)element , "sayali"));
+    ASSERT(queue->queueInfo.rear == 2);
+    ASSERT(queue->queueInfo.front == 0);
 }
